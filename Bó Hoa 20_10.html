@@ -1,0 +1,622 @@
+<!doctype html><html><head><meta charset=utf8><meta name=viewport content="width=device-width,initial-scale=1,viewport-fit=cover"><style>:root{color-scheme:light;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}html{scroll-padding-top:env(safe-area-inset-top,0px)}body{margin:0;padding:0;font:14px -apple-system,BlinkMacSystemFont,sans-serif;background:#fff;color:#000}img{max-width:100%}[hidden]:not([hidden=until-found i]){display:none!important}</style></head><body>
+<title>Bó Hoa 20/10</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@600;700;800&family=Be+Vietnam+Pro:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+/* Layout: the bouquet grows in the upper stage; name, prompt and the flower keyboard sit in a dock at the bottom.
+   One committed look: a night-plum sky with magenta light bleeding in from the top corners. */
+:root {
+  --plum-night: #33062c;
+  --plum: #5e0b4c;
+  --magenta: #c93b92;
+  --blush: #f6b8d4;
+  --ink: #fff4f9;
+  --ink-soft: #e8bfd5;
+  --key: rgba(28, 6, 26, 0.74);
+  --key-hover: rgba(62, 15, 56, 0.9);
+  --key-wide: rgba(246, 184, 212, 0.58);
+  --key-wide-ink: #4b0b3d;
+  --leaf: #58a468;
+  --font-display: 'Baloo 2', 'Be Vietnam Pro', system-ui, sans-serif;
+  --font-body: 'Be Vietnam Pro', system-ui, sans-serif;
+  color-scheme: dark;
+}
+
+html, body { height: 100%; }
+body {
+  box-sizing: border-box;
+  margin: 0;
+  padding-block: 10px 12px;
+  padding-left: max(16px, env(safe-area-inset-left, 0px));
+  padding-right: max(16px, env(safe-area-inset-right, 0px));
+  background-color: var(--plum-night);
+  background-image:
+    radial-gradient(55% 38% at 16% 6%, rgba(255, 170, 196, 0.55), transparent 72%),
+    radial-gradient(48% 34% at 72% 0%, rgba(232, 74, 164, 0.55), transparent 72%),
+    radial-gradient(55% 36% at 88% 100%, rgba(255, 112, 132, 0.42), transparent 72%),
+    linear-gradient(180deg, #86196a 0%, #4b0a3e 36%, #3a0733 68%, #55103f 100%);
+  color: var(--ink);
+  font-family: var(--font-body);
+  overflow: hidden;
+}
+
+.app {
+  position: relative;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+
+.sparks { position: absolute; inset: 0; pointer-events: none; }
+.spark {
+  position: absolute;
+  width: var(--s);
+  height: var(--s);
+  border-radius: 50%;
+  background: #ffd9ea;
+  opacity: 0.35;
+  left: var(--x);
+  top: var(--y);
+  animation: drift var(--d) ease-in-out infinite alternate;
+}
+@keyframes drift { from { transform: translate(0, 0); opacity: 0.15; } to { transform: translate(var(--dx), var(--dy)); opacity: 0.5; } }
+
+.stage { position: relative; flex: 1; min-height: 0; }
+#bouquet { position: absolute; inset: 0; width: 100%; height: 100%; }
+.hint {
+  position: absolute;
+  inset: 0;
+  display: grid;
+  place-items: center;
+  margin: 0;
+  padding-bottom: 40px;
+  color: var(--ink-soft);
+  font-size: 15px;
+  text-align: center;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.3s;
+}
+.hint.on { opacity: 0.85; }
+
+.fl { transition: transform 0.55s cubic-bezier(0.3, 1.25, 0.4, 1); }
+.grow { transform-origin: 0 0; animation: grow 0.85s cubic-bezier(0.2, 0.9, 0.3, 1) both; }
+@keyframes grow {
+  from { transform: scale(0); opacity: 0; }
+  55% { opacity: 1; }
+  78% { transform: scale(1.05); }
+  to { transform: scale(1); opacity: 1; }
+}
+
+.dock { width: 100%; max-width: 800px; margin-inline: auto; padding-top: 6px; }
+
+.name {
+  min-height: 1.25em;
+  margin-bottom: 4px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-family: var(--font-display);
+  font-weight: 800;
+  font-size: clamp(28px, 6vw, 44px);
+  line-height: 1.2;
+  letter-spacing: 0.01em;
+  text-align: center;
+  overflow-wrap: anywhere;
+}
+.name .ph { color: rgba(255, 244, 249, 0.38); font-weight: 600; }
+.caret {
+  display: inline-block;
+  width: 3px;
+  height: 0.8em;
+  margin-left: 4px;
+  border-radius: 2px;
+  background: var(--blush);
+  animation: blink 1s steps(1) infinite;
+}
+@keyframes blink { 50% { opacity: 0; } }
+.name.shake { animation: shake 0.35s; }
+@keyframes shake { 25% { transform: translateX(-6px); } 75% { transform: translateX(6px); } }
+
+h1 {
+  margin: 0;
+  font-family: var(--font-display);
+  font-weight: 700;
+  font-size: clamp(18px, 3.4vw, 24px);
+  line-height: 1.25;
+  text-align: center;
+  text-wrap: balance;
+}
+.sub { margin: 2px 0 0; text-align: center; font-size: 14px; color: var(--ink-soft); }
+
+.kb {
+  --kw: min(76px, calc((100vw - 32px) / 10));
+  display: grid;
+  grid-template-columns: repeat(20, calc(var(--kw) / 2));
+  grid-auto-rows: calc(var(--kw) * 1.3);
+  width: calc(var(--kw) * 10);
+  margin: 12px auto 0;
+}
+.key {
+  grid-column: span 2;
+  position: relative;
+  margin: 3px;
+  padding: 0;
+  border: 0;
+  border-radius: 8px;
+  background: var(--key);
+  color: #fff;
+  cursor: pointer;
+  overflow: hidden;
+  touch-action: manipulation;
+  -webkit-tap-highlight-color: transparent;
+  transition: background 0.15s, transform 0.1s;
+}
+.key svg { position: absolute; inset: 0; width: 100%; height: 100%; }
+.key .l {
+  position: absolute;
+  left: 6px;
+  bottom: 3px;
+  font-family: var(--font-display);
+  font-weight: 800;
+  font-size: clamp(12px, calc(var(--kw) * 0.26), 20px);
+  line-height: 1;
+}
+.key:hover { background: var(--key-hover); }
+.key:active { transform: scale(0.95); }
+.key:focus-visible { outline: 2px solid var(--blush); outline-offset: 1px; }
+.key.wide {
+  grid-column: span 3;
+  display: grid;
+  place-items: center;
+  background: var(--key-wide);
+  color: var(--key-wide-ink);
+  font-family: var(--font-display);
+  font-weight: 800;
+  font-size: clamp(18px, calc(var(--kw) * 0.4), 30px);
+}
+.key.wide:hover { background: rgba(246, 184, 212, 0.78); }
+
+.result { text-align: center; padding: 6px 0 4px; display: flex; flex-direction: column; align-items: center; gap: 4px; }
+.result[hidden] { display: none; }
+.lead { margin: 0; font-size: 15px; color: var(--ink-soft); }
+.bigname { margin: 0; font-family: var(--font-display); font-weight: 800; font-size: clamp(34px, 8vw, 56px); line-height: 1.1; overflow-wrap: anywhere; }
+.wish { margin: 2px 0 10px; max-width: 22em; font-family: var(--font-display); font-weight: 700; font-size: clamp(19px, 4.6vw, 26px); line-height: 1.35; color: var(--ink); text-wrap: balance; }
+.again {
+  border: 0;
+  border-radius: 999px;
+  padding: 10px 22px;
+  background: var(--key-wide);
+  color: var(--key-wide-ink);
+  font: 700 16px var(--font-display);
+  cursor: pointer;
+}
+.again:hover { background: rgba(246, 184, 212, 0.8); }
+.again:focus-visible { outline: 2px solid var(--blush); outline-offset: 2px; }
+
+.is-result #name, .is-result #prompt { display: none; }
+
+#petals { position: absolute; inset: 0; width: 100%; height: 100%; pointer-events: none; z-index: 5; }
+.result:not([hidden]) > * { animation: rise 0.8s cubic-bezier(0.2, 0.9, 0.3, 1) both; }
+.result:not([hidden]) > :nth-child(2) { animation-delay: 0.12s; }
+.result:not([hidden]) > :nth-child(3) { animation-delay: 0.3s; }
+.result:not([hidden]) > :nth-child(4) { animation-delay: 0.5s; }
+@keyframes rise { from { opacity: 0; transform: translateY(14px); } to { opacity: 1; transform: none; } }
+
+@media (prefers-reduced-motion: reduce) {
+  .grow, .spark, .caret, .name.shake { animation: none; }
+  .fl { transition: none; }
+}
+</style>
+
+<main class="app" id="app">
+  <div class="sparks" id="sparks" aria-hidden="true"></div>
+  <canvas id="petals" aria-hidden="true"></canvas>
+
+  <section class="stage">
+    <svg id="bouquet" viewBox="0 0 800 560" preserveAspectRatio="xMidYMax meet" role="img" aria-label="Bó hoa kết từ tên của bạn">
+      <g id="flowers"></g>
+      <g id="wrap">
+        <path d="M312 396 Q400 428 488 396 L426 548 L374 548 Z" fill="#ffe3ef" opacity="0.94"/>
+        <path d="M312 396 Q400 428 488 396 L454 474 Q400 496 346 474 Z" fill="#ffc2dc" opacity="0.95"/>
+        <path d="M400 452 L388 548" stroke="#f0a8c8" stroke-width="1.5" fill="none" opacity="0.7"/>
+        <path d="M400 452 C372 428 350 440 355 458 C360 475 386 468 400 452Z" fill="#d63a95"/>
+        <path d="M400 452 C428 428 450 440 445 458 C440 475 414 468 400 452Z" fill="#d63a95"/>
+        <path d="M398 458 L384 494 M402 458 L418 492" stroke="#d63a95" stroke-width="6" stroke-linecap="round" fill="none"/>
+        <circle cx="400" cy="452" r="8" fill="#a8226f"/>
+      </g>
+    </svg>
+    <p class="hint" id="hint">Mỗi chữ cái bạn gõ sẽ nở thành một cành hoa ở đây.</p>
+  </section>
+
+  <section class="dock">
+    <div class="name" id="name" aria-live="polite"></div>
+
+    <div id="prompt">
+      <h1>Gõ tên của bạn để kết một bó hoa 20/10</h1>
+      <p class="sub">Mỗi chữ cái là một cành hoa</p>
+      <div class="kb" id="kb"></div>
+    </div>
+
+    <div class="result" id="result" hidden>
+      <p class="lead">Bó hoa dành tặng</p>
+      <h2 class="bigname" id="bigname"></h2>
+      <p class="wish">Chúc ngoan xinh yêu ngày 20/10 luôn xinh đẹp và giỏi giang nha!</p>
+      <button class="again" id="again" type="button">Kết bó hoa khác</button>
+    </div>
+  </section>
+</main>
+
+<script>
+(function () {
+  var NS = 'http://www.w3.org/2000/svg';
+  var MAX_LETTERS = 12;
+
+  function rng(seed) {
+    var a = seed >>> 0;
+    return function () {
+      a |= 0; a = a + 0x6D2B79F5 | 0;
+      var t = Math.imul(a ^ a >>> 15, 1 | a);
+      t = t + Math.imul(t ^ t >>> 7, 61 | t) ^ t;
+      return ((t ^ t >>> 14) >>> 0) / 4294967296;
+    };
+  }
+  function f(n) { return Math.round(n * 100) / 100; }
+
+  /* One flower per letter. h = heads as [dx, dy, scale]; the first is the main bloom. */
+  var F = {
+    q: { k: 'daisy', p: '#ffffff', c: '#ffd23f', h: [[0,0,1],[-14,14,.78],[13,11,.72]], lean: -4 },
+    w: { k: 'cluster', cols: ['#ff7eb6','#ffa3cb','#ff5fa2'], h: [[0,0,1.1]], lean: 5 },
+    e: { k: 'cluster', cols: ['#ffffff','#f4f4ff','#e9e4f5'], h: [[0,0,1.2]], lean: -5 },
+    r: { k: 'star', p: '#ff8fc0', c: '#ffe7a0', h: [[0,0,1],[-15,13,.85],[15,8,.8]], lean: 3 },
+    t: { k: 'blossom', p: '#ffffff', c: '#ffd77a', h: [[0,0,1],[-12,13,.8],[12,10,.7]], lean: -3 },
+    y: { k: 'balls', p: '#ff9ec7', h: [[0,0,.8],[-12,12,.6],[11,16,.55]], lean: 4 },
+    u: { k: 'daisy', p: '#ffffff', c: '#ffd23f', n: 10, h: [[0,0,1.1],[-12,16,.6]], lean: -4 },
+    i: { k: 'spike', cols: ['#ff7eb6','#ffb4d3'], h: [[0,6,1]], lean: 5 },
+    o: { k: 'balls', p: '#ffffff', h: [[0,0,.9],[-14,11,.7],[14,16,.6]], lean: -5 },
+    p: { k: 'daisy', p: '#ff9fc8', c: '#fff1a8', n: 10, h: [[0,0,1],[-14,12,.8]], lean: 4 },
+    a: { k: 'cluster', cols: ['#ffffff','#ff9ec7','#ffc4dd'], h: [[0,0,1.15]], lean: -3 },
+    s: { k: 'bells', p: '#ffffff', h: [[0,4,1]], lean: 3 },
+    d: { k: 'tulip', p: '#ff7fb5', c: '#ffb5d5', h: [[0,0,1],[-13,12,.85]], lean: -3 },
+    f: { k: 'umbel', p: '#ffffff', h: [[0,4,1.2]], lean: 4 },
+    g: { k: 'rose', p: '#ff5c9d', c: '#b81d62', h: [[0,0,1],[13,14,.7]], lean: -4 },
+    h: { k: 'daisy', p: '#ffffff', c: '#ff8fc0', n: 8, h: [[0,0,1],[-13,13,.85],[12,12,.7]], lean: 3 },
+    j: { k: 'balls', p: '#ff7eb6', h: [[0,0,.75],[12,14,.6]], lean: -3 },
+    k: { k: 'tulip', p: '#fffafc', c: '#e9dff0', h: [[0,0,1],[-12,14,.8],[12,12,.75]], lean: 4 },
+    l: { k: 'carnation', p: '#ff6fa9', c: '#ffa6cb', h: [[0,0,.95],[-13,13,.7]], lean: -4 },
+    z: { k: 'daisy', p: '#ffffff', c: '#ffd23f', n: 9, h: [[0,0,1],[-14,12,.8]], lean: 3 },
+    x: { k: 'spike', cols: ['#ff9ec7','#ffd0e3'], h: [[0,6,1]], lean: -5 },
+    c: { k: 'bells', p: '#ffffff', h: [[0,4,1]], lean: 4 },
+    v: { k: 'tulip', p: '#ff9a5a', c: '#ffb3d0', h: [[0,0,1],[12,12,.8]], lean: -3 },
+    b: { k: 'blossom', p: '#ffffff', c: '#ffd77a', h: [[0,0,.9],[-11,14,.8],[12,10,.75]], lean: 3 },
+    n: { k: 'sunflower', p: '#ff8a5c', c: '#6b2b2b', h: [[0,0,1]], lean: -3 },
+    m: { k: 'blossom', p: '#ffffff', c: '#ffc2dc', h: [[0,0,.85],[-12,13,.7],[12,12,.7],[0,22,.6]], lean: 4 }
+  };
+
+  function head(sp, x, y, s, rnd) {
+    var r = 11 * s, o = '', i, a, n;
+    switch (sp.k) {
+      case 'daisy':
+        n = sp.n || 9;
+        for (a = 0; a < n; a++) o += '<ellipse cx="0" cy="' + f(-r * .62) + '" rx="' + f(r * .27) + '" ry="' + f(r * .55) + '" fill="' + sp.p + '" transform="rotate(' + f(a * 360 / n) + ')"/>';
+        o += '<circle r="' + f(r * .3) + '" fill="' + sp.c + '"/>';
+        break;
+      case 'blossom':
+        for (a = 0; a < 5; a++) {
+          var ang = a * 72 * Math.PI / 180;
+          o += '<circle cx="' + f(Math.sin(ang) * r * .52) + '" cy="' + f(-Math.cos(ang) * r * .52) + '" r="' + f(r * .43) + '" fill="' + sp.p + '"/>';
+        }
+        o += '<circle r="' + f(r * .22) + '" fill="' + sp.c + '"/>';
+        break;
+      case 'star':
+        var pts = [];
+        for (i = 0; i < 10; i++) {
+          var rad = i % 2 ? r * .38 : r * 1.05, an = (i * 36 - 90) * Math.PI / 180;
+          pts.push(f(Math.cos(an) * rad) + ',' + f(Math.sin(an) * rad));
+        }
+        o += '<polygon points="' + pts.join(' ') + '" fill="' + sp.p + '" stroke="' + sp.p + '" stroke-width="' + f(r * .12) + '" stroke-linejoin="round"/>';
+        o += '<circle r="' + f(r * .16) + '" fill="' + sp.c + '"/>';
+        break;
+      case 'tulip':
+        o += '<path d="M0 ' + f(r * .6) + ' C' + f(-r * .75) + ' ' + f(r * .6) + ' ' + f(-r * .8) + ' ' + f(-r * .2) + ' ' + f(-r * .62) + ' ' + f(-r * .95) + ' L' + f(-r * .3) + ' ' + f(-r * .45) + ' L0 ' + f(-r * 1.05) + ' L' + f(r * .3) + ' ' + f(-r * .45) + ' L' + f(r * .62) + ' ' + f(-r * .95) + ' C' + f(r * .8) + ' ' + f(-r * .2) + ' ' + f(r * .75) + ' ' + f(r * .6) + ' 0 ' + f(r * .6) + 'Z" fill="' + sp.p + '"/>';
+        o += '<ellipse cx="0" cy="' + f(r * .05) + '" rx="' + f(r * .28) + '" ry="' + f(r * .5) + '" fill="' + sp.c + '" opacity=".75"/>';
+        break;
+      case 'rose':
+        o += '<circle r="' + f(r * .85) + '" fill="' + sp.p + '"/>';
+        o += '<path d="M0 ' + f(r * .1) + ' A' + f(r * .18) + ' ' + f(r * .18) + ' 0 1 1 ' + f(r * .22) + ' ' + f(-r * .05) + ' A' + f(r * .4) + ' ' + f(r * .4) + ' 0 1 1 ' + f(-r * .35) + ' ' + f(-r * .1) + ' A' + f(r * .62) + ' ' + f(r * .62) + ' 0 0 1 ' + f(r * .3) + ' ' + f(r * .5) + '" fill="none" stroke="' + sp.c + '" stroke-width="' + f(r * .12) + '" stroke-linecap="round"/>';
+        break;
+      case 'bells':
+        var bp = [[-.8, .4], [0, -.1], [.8, .45]];
+        for (i = 0; i < 3; i++) {
+          var bx = bp[i][0] * r, by = bp[i][1] * r;
+          o += '<path d="M0 ' + f(r * .9) + ' Q' + f(bx * .3) + ' ' + f(by - r * .6) + ' ' + f(bx) + ' ' + f(by - r * .5) + '" fill="none" stroke="#58a468" stroke-width="' + f(r * .1) + '"/>';
+          o += '<path transform="translate(' + f(bx) + ' ' + f(by) + ')" d="M' + f(-r * .28) + ' ' + f(-r * .05) + ' Q' + f(-r * .3) + ' ' + f(-r * .5) + ' 0 ' + f(-r * .5) + ' Q' + f(r * .3) + ' ' + f(-r * .5) + ' ' + f(r * .28) + ' ' + f(-r * .05) + ' Q' + f(r * .42) + ' ' + f(r * .3) + ' ' + f(r * .3) + ' ' + f(r * .4) + ' L' + f(-r * .3) + ' ' + f(r * .4) + ' Q' + f(-r * .42) + ' ' + f(r * .3) + ' ' + f(-r * .28) + ' ' + f(-r * .05) + 'Z" fill="' + sp.p + '"/>';
+        }
+        break;
+      case 'sunflower':
+        for (a = 0; a < 14; a++) o += '<ellipse cx="0" cy="' + f(-r * .78) + '" rx="' + f(r * .2) + '" ry="' + f(r * .5) + '" fill="' + sp.p + '" transform="rotate(' + f(a * 360 / 14) + ')"/>';
+        o += '<circle r="' + f(r * .42) + '" fill="' + sp.c + '"/>';
+        for (i = 0; i < 7; i++) o += '<circle cx="' + f((rnd() - .5) * r * .5) + '" cy="' + f((rnd() - .5) * r * .5) + '" r="' + f(r * .04) + '" fill="#d98b6a"/>';
+        break;
+      case 'balls':
+        o += '<circle r="' + f(r * .55) + '" fill="' + sp.p + '"/><circle cx="' + f(-r * .18) + '" cy="' + f(-r * .18) + '" r="' + f(r * .14) + '" fill="#fff" opacity=".55"/>';
+        break;
+      case 'spike':
+        for (i = 0; i < 16; i++) {
+          var t = i / 15;
+          o += '<circle cx="' + f((rnd() - .5) * r * .9 * (1 - t * .6)) + '" cy="' + f(r * .9 - t * r * 3) + '" r="' + f(r * (.22 - .1 * t)) + '" fill="' + sp.cols[i % 2] + '"/>';
+        }
+        break;
+      case 'carnation':
+        for (i = 0; i < 10; i++) {
+          var ca = i * 36 * Math.PI / 180;
+          o += '<circle cx="' + f(Math.sin(ca) * r * .55) + '" cy="' + f(-Math.cos(ca) * r * .55) + '" r="' + f(r * .36) + '" fill="' + sp.p + '"/>';
+        }
+        for (i = 0; i < 6; i++) {
+          var ia = i * 60 * Math.PI / 180;
+          o += '<circle cx="' + f(Math.sin(ia) * r * .28) + '" cy="' + f(-Math.cos(ia) * r * .28) + '" r="' + f(r * .26) + '" fill="' + sp.c + '"/>';
+        }
+        o += '<circle r="' + f(r * .2) + '" fill="' + sp.p + '"/>';
+        break;
+      case 'umbel':
+        for (i = 0; i < 7; i++) {
+          var ua = (-78 + i * 26) * Math.PI / 180, ex = Math.sin(ua) * r * 1.15, ey = -Math.cos(ua) * r * 1.05 + r * .3;
+          o += '<path d="M0 ' + f(r * .5) + ' L' + f(ex) + ' ' + f(ey) + '" stroke="' + sp.p + '" stroke-width="' + f(r * .06) + '" fill="none"/>';
+          o += '<circle cx="' + f(ex) + '" cy="' + f(ey) + '" r="' + f(r * .2) + '" fill="' + sp.p + '"/>';
+          o += '<circle cx="' + f(ex + r * .18) + '" cy="' + f(ey - r * .12) + '" r="' + f(r * .1) + '" fill="' + sp.p + '"/>';
+          o += '<circle cx="' + f(ex - r * .18) + '" cy="' + f(ey - r * .1) + '" r="' + f(r * .1) + '" fill="' + sp.p + '"/>';
+        }
+        break;
+      default: /* cluster */
+        for (i = 0; i < 20; i++) {
+          var cr = Math.sqrt(rnd()) * r * 1.05, ca2 = rnd() * 6.283;
+          o += '<circle cx="' + f(Math.cos(ca2) * cr) + '" cy="' + f(Math.sin(ca2) * cr) + '" r="' + f(r * (.15 + rnd() * .12)) + '" fill="' + sp.cols[Math.floor(rnd() * sp.cols.length)] + '"/>';
+        }
+    }
+    return '<g transform="translate(' + f(x) + ' ' + f(y) + ')">' + o + '</g>';
+  }
+
+  /* Draws one flower with its stem base at (0,0), growing upward. */
+  function flower(ch, len) {
+    var sp = F[ch], rnd = rng(ch.charCodeAt(0) * 977), L = sp.lean;
+    var P1 = [L * .4, -len * .5], P2 = [L, -len];
+    function B(t) { var u = 1 - t; return [2 * u * t * P1[0] + t * t * P2[0], 2 * u * t * P1[1] + t * t * P2[1]]; }
+    var o = '', i;
+
+    for (i = 1; i < sp.h.length; i++) {
+      var b = B(.5), tx = L + sp.h[i][0], ty = -len + sp.h[i][1];
+      o += '<path d="M' + f(b[0]) + ' ' + f(b[1]) + ' Q' + f(b[0] + (tx - b[0]) * .1) + ' ' + f((b[1] + ty) / 2) + ' ' + f(tx) + ' ' + f(ty) + '" fill="none" stroke="#58a468" stroke-width="1.2" stroke-linecap="round"/>';
+    }
+    o += '<path d="M0 0 Q' + f(P1[0]) + ' ' + f(P1[1]) + ' ' + f(P2[0]) + ' ' + f(P2[1]) + '" fill="none" stroke="#58a468" stroke-width="1.6" stroke-linecap="round"/>';
+
+    var leafAt = [[.28, 1], [.52, -1]];
+    for (i = 0; i < 2; i++) {
+      var p = B(leafAt[i][0]), d = leafAt[i][1];
+      o += '<path transform="translate(' + f(p[0]) + ' ' + f(p[1]) + ') scale(' + d + ' 1) rotate(-28)" d="M0 0 Q6 -7 15 -4 Q7 3 0 0Z" fill="#3f9157"/>';
+    }
+    for (i = sp.h.length - 1; i >= 0; i--) {
+      o += head(sp, L + sp.h[i][0], -len + sp.h[i][1], sp.h[i][2], rnd);
+    }
+    return o;
+  }
+
+  /* ---------- Falling petals ---------- */
+  var pet = { raf: 0, list: [], on: false, W: 0, H: 0 };
+  var PCOLS = ['#ffb8d6', '#ff8fc0', '#ffd9ea', '#ffffff', '#ff6fa9', '#ffc2dc'];
+
+  function petalMake(initial) {
+    return {
+      x: Math.random() * pet.W,
+      y: initial ? -Math.random() * pet.H * 1.1 : -24 - Math.random() * 60,
+      s: 7 + Math.random() * 9,
+      vy: 0.8 + Math.random() * 1.2,
+      ph: Math.random() * 6.283,
+      sw: 0.5 + Math.random() * 1.1,
+      rot: Math.random() * 6.283,
+      vr: (Math.random() - 0.5) * 0.05,
+      fl: Math.random() * 6.283,
+      vf: 0.03 + Math.random() * 0.04,
+      c: PCOLS[Math.floor(Math.random() * PCOLS.length)]
+    };
+  }
+
+  function petalSize() {
+    var cv = document.getElementById('petals'), dpr = Math.min(2, window.devicePixelRatio || 1);
+    pet.W = cv.clientWidth; pet.H = cv.clientHeight;
+    cv.width = Math.round(pet.W * dpr); cv.height = Math.round(pet.H * dpr);
+    cv.getContext('2d').setTransform(dpr, 0, 0, dpr, 0, 0);
+  }
+
+  function stopPetals() {
+    pet.on = false;
+    cancelAnimationFrame(pet.raf);
+    pet.list = [];
+    var cv = document.getElementById('petals');
+    cv.getContext('2d').clearRect(0, 0, cv.width, cv.height);
+  }
+
+  function startPetals() {
+    if (window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+    stopPetals();
+    petalSize();
+    var cv = document.getElementById('petals'), ctx = cv.getContext('2d');
+    var count = pet.W < 600 ? 42 : 70, i;
+    for (i = 0; i < count; i++) pet.list.push(petalMake(true));
+    pet.on = true;
+    (function loop() {
+      if (!pet.on) return;
+      ctx.clearRect(0, 0, pet.W, pet.H);
+      for (var j = 0; j < pet.list.length; j++) {
+        var p = pet.list[j];
+        p.y += p.vy; p.ph += 0.02; p.x += Math.sin(p.ph) * p.sw; p.rot += p.vr; p.fl += p.vf;
+        if (p.y > pet.H + 24) { pet.list[j] = p = petalMake(false); }
+        if (p.y < -20) continue;
+        ctx.save();
+        ctx.translate(p.x, p.y);
+        ctx.rotate(p.rot);
+        ctx.scale(1, Math.cos(p.fl));
+        ctx.globalAlpha = 0.92;
+        ctx.fillStyle = p.c;
+        ctx.beginPath();
+        ctx.moveTo(0, -p.s);
+        ctx.bezierCurveTo(p.s * 0.9, -p.s * 0.5, p.s * 0.7, p.s * 0.7, 0, p.s);
+        ctx.bezierCurveTo(-p.s * 0.7, p.s * 0.7, -p.s * 0.9, -p.s * 0.5, 0, -p.s);
+        ctx.fill();
+        ctx.restore();
+      }
+      pet.raf = requestAnimationFrame(loop);
+    })();
+  }
+
+  window.addEventListener('resize', function () { if (pet.on) petalSize(); });
+
+  /* ---------- Keyboard ---------- */
+  var ROWS = ['qwertyuiop', 'asdfghjkl', 'zxcvbnm'];
+  var kb = document.getElementById('kb');
+  var kbHtml = '';
+  ROWS.forEach(function (row, ri) {
+    row.split('').forEach(function (ch, ci) {
+      var style = (ri === 1 && ci === 0) ? ' style="grid-column: 2 / span 2"' : '';
+      kbHtml += '<button class="key" type="button" data-k="' + ch + '" aria-label="' + ch.toUpperCase() + '"' + style + '>' +
+        '<svg viewBox="-32 -98 64 104" preserveAspectRatio="xMidYMax meet" aria-hidden="true">' + flower(ch, 70) + '</svg>' +
+        '<span class="l">' + ch.toUpperCase() + '</span></button>';
+    });
+  });
+  kbHtml += '<button class="key wide" type="button" data-act="back" aria-label="Xóa chữ cuối">' +
+    '<svg viewBox="0 0 24 24" width="30" height="30" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" style="position:static;width:30px;height:30px" aria-hidden="true"><path d="M19 12H5M11 6l-6 6 6 6"/></svg></button>' +
+    '<button class="key wide" type="button" data-act="ok" aria-label="Hoàn tất bó hoa">OK</button>';
+  kb.innerHTML = kbHtml;
+
+  /* ---------- Bouquet ---------- */
+  var layer = document.getElementById('flowers');
+  var nodes = [];
+  var name = 'linh';
+  var app = document.getElementById('app');
+  var nameEl = document.getElementById('name');
+  var hint = document.getElementById('hint');
+
+  function lenFor(i) { return 74 + ((i * 5) % 3) * 7; }
+
+  function layout() {
+    var n = nodes.length, S = Math.min(38, 5 + n * 5.5);
+    nodes.forEach(function (g, i) {
+      var th = n === 1 ? 0 : -S + 2 * S * i / (n - 1);
+      g.style.transform = 'translate(400px, 500px) rotate(' + f(th) + 'deg)';
+    });
+    hint.classList.toggle('on', n === 0);
+  }
+
+  function addNode(ch, delay) {
+    var i = nodes.length, g = document.createElementNS(NS, 'g');
+    g.setAttribute('class', 'fl');
+    g.innerHTML = '<g class="grow" style="animation-delay:' + (delay || 0) + 's"><g transform="scale(3)">' + flower(ch, lenFor(i)) + '</g></g>';
+    layer.appendChild(g);
+    nodes.push(g);
+  }
+
+  function letterCount() { return name.replace(/ /g, '').length; }
+
+  function pretty(s) {
+    return s.split(' ').map(function (w) { return w.charAt(0).toUpperCase() + w.slice(1); }).join(' ');
+  }
+
+  function renderName() {
+    if (!name) { nameEl.innerHTML = '<span class="ph">Tên của bạn</span><span class="caret"></span>'; return; }
+    nameEl.textContent = pretty(name);
+    var c = document.createElement('span'); c.className = 'caret';
+    nameEl.appendChild(c);
+  }
+
+  function addChar(ch) {
+    if (ch === ' ') {
+      if (name && name.slice(-1) !== ' ' && name.length < 22) { name += ' '; renderName(); }
+      return;
+    }
+    if (letterCount() >= MAX_LETTERS) { shake(); return; }
+    name += ch;
+    addNode(ch, 0);
+    layout();
+    renderName();
+  }
+
+  function backspace() {
+    if (!name) return;
+    var last = name.slice(-1);
+    name = name.slice(0, -1);
+    if (last !== ' ') { var g = nodes.pop(); if (g) g.remove(); }
+    layout();
+    renderName();
+  }
+
+  function shake() {
+    nameEl.classList.remove('shake');
+    void nameEl.offsetWidth;
+    nameEl.classList.add('shake');
+  }
+
+  function finish() {
+    if (!letterCount()) { shake(); return; }
+    document.getElementById('bigname').textContent = pretty(name.trim());
+    app.classList.add('is-result');
+    document.getElementById('result').hidden = false;
+    startPetals();
+  }
+
+  function edit() {
+    app.classList.remove('is-result');
+    document.getElementById('result').hidden = true;
+    stopPetals();
+  }
+
+  kb.addEventListener('click', function (e) {
+    var b = e.target.closest('button.key');
+    if (!b) return;
+    if (b.dataset.act === 'back') backspace();
+    else if (b.dataset.act === 'ok') finish();
+    else addChar(b.dataset.k);
+  });
+
+  document.getElementById('again').addEventListener('click', function () {
+    while (nodes.length) nodes.pop().remove();
+    name = '';
+    layout();
+    renderName();
+    edit();
+  });
+
+  document.addEventListener('keydown', function (e) {
+    if (e.ctrlKey || e.metaKey || e.altKey) return;
+    var inResult = app.classList.contains('is-result');
+    if (e.key === 'Escape') { if (inResult) edit(); return; }
+    if (inResult) return;
+    var onButton = e.target && e.target.closest && e.target.closest('button');
+    if (e.key === 'Enter') { if (!onButton) { e.preventDefault(); finish(); } return; }
+    if (e.key === 'Backspace') { e.preventDefault(); backspace(); return; }
+    if (e.key === ' ') { if (!onButton) { e.preventDefault(); addChar(' '); } return; }
+    var ch = null;
+    if (e.key && e.key.length === 1) {
+      var nrm = e.key.normalize('NFD').replace(/[̀-ͯ]/g, '').replace(/đ/gi, 'd').toLowerCase();
+      if (/^[a-z]$/.test(nrm)) ch = nrm;
+    }
+    if (!ch && /^Key[A-Z]$/.test(e.code || '')) ch = e.code.charAt(3).toLowerCase();
+    if (ch) { e.preventDefault(); addChar(ch); }
+  });
+
+  /* ---------- Background sparks ---------- */
+  var sp = document.getElementById('sparks'), sh = '', r = rng(20102026);
+  for (var k = 0; k < 22; k++) {
+    sh += '<span class="spark" style="--x:' + f(r() * 100) + '%;--y:' + f(r() * 100) + '%;--s:' + f(2 + r() * 3) + 'px;--d:' + f(5 + r() * 7) + 's;--dx:' + f((r() - .5) * 30) + 'px;--dy:' + f(-10 - r() * 30) + 'px"></span>';
+  }
+  sp.innerHTML = sh;
+
+  /* ---------- Start with an example name so the bouquet is already in bloom ---------- */
+  name.split('').forEach(function (ch, i) { addNode(ch, 0.1 + i * 0.12); });
+  layout();
+  renderName();
+})();
+</script>
+
+</body></html>
